@@ -187,6 +187,10 @@ let initialY;
 let xOffset = 0;
 let yOffset = 0;
 let dragStartTime = 0;
+let startX = 0;
+let startY = 0;
+const DRAG_THRESHOLD = 10; // 10 pixel hareket eşiği
+const CLICK_TIME_THRESHOLD = 300; // 300ms - mobil için daha uzun
 
 const mascotWidget = document.querySelector('.mascot-widget');
 const mascotContainer = document.getElementById('mascotContainer');
@@ -214,9 +218,13 @@ function dragStart(e) {
     if (e.type === 'touchstart') {
         initialX = e.touches[0].clientX - xOffset;
         initialY = e.touches[0].clientY - yOffset;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
     } else {
         initialX = e.clientX - xOffset;
         initialY = e.clientY - yOffset;
+        startX = e.clientX;
+        startY = e.clientY;
     }
     
     if (e.target === mascotContainer || e.target === mascotImage || e.target.classList.contains('help-badge')) {
@@ -228,30 +236,46 @@ function dragStart(e) {
 
 function drag(e) {
     if (isDragging) {
-        e.preventDefault();
-        hasMoved = true;
+        let clientX, clientY;
         
         if (e.type === 'touchmove') {
-            currentX = e.touches[0].clientX - initialX;
-            currentY = e.touches[0].clientY - initialY;
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
         } else {
-            currentX = e.clientX - initialX;
-            currentY = e.clientY - initialY;
+            clientX = e.clientX;
+            clientY = e.clientY;
         }
         
-        xOffset = currentX;
-        yOffset = currentY;
+        // Hareket mesafesini kontrol et
+        const deltaX = Math.abs(clientX - startX);
+        const deltaY = Math.abs(clientY - startY);
         
-        // Ekran sınırları içinde tut
-        const rect = mascotWidget.getBoundingClientRect();
-        const maxX = window.innerWidth - rect.width - 20;
-        const maxY = window.innerHeight - rect.height - 20;
-        
-        // Sınırlama hesapları
-        xOffset = Math.min(Math.max(-(window.innerWidth - rect.width - 40), xOffset), maxX - 20);
-        yOffset = Math.min(Math.max(-(window.innerHeight - rect.height - 40), yOffset), maxY - 20);
-        
-        setTranslate(xOffset, yOffset, mascotWidget);
+        if (deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD) {
+            hasMoved = true;
+            e.preventDefault();
+            
+            if (e.type === 'touchmove') {
+                currentX = e.touches[0].clientX - initialX;
+                currentY = e.touches[0].clientY - initialY;
+            } else {
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+            }
+            
+            xOffset = currentX;
+            yOffset = currentY;
+            
+            // Ekran sınırları içinde tut
+            const rect = mascotWidget.getBoundingClientRect();
+            const maxX = window.innerWidth - rect.width - 20;
+            const maxY = window.innerHeight - rect.height - 20;
+            
+            // Sınırlama hesapları
+            xOffset = Math.min(Math.max(-(window.innerWidth - rect.width - 40), xOffset), maxX - 20);
+            yOffset = Math.min(Math.max(-(window.innerHeight - rect.height - 40), yOffset), maxY - 20);
+            
+            setTranslate(xOffset, yOffset, mascotWidget);
+        }
     }
 }
 
@@ -262,12 +286,14 @@ function dragEnd(e) {
         mascotImage.style.cursor = 'grab';
         
         // Pozisyonu local storage'a kaydet
-        localStorage.setItem('mascotX', xOffset);
-        localStorage.setItem('mascotY', yOffset);
+        if (hasMoved) {
+            localStorage.setItem('mascotX', xOffset);
+            localStorage.setItem('mascotY', yOffset);
+        }
         
-        // Eğer çok az hareket ettiyse veya hızlıca tıklandıysa, toggle help çağır
+        // Eğer hareket etmedi veya çok hızlı tıklandıysa, toggle help çağır
         const dragDuration = Date.now() - dragStartTime;
-        if (!hasMoved || dragDuration < 200) {
+        if (!hasMoved && dragDuration < CLICK_TIME_THRESHOLD) {
             setTimeout(() => toggleHelp(), 50);
         }
     }

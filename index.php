@@ -143,7 +143,9 @@ $stats = $pdo->query("
                                             <th>Miktar</th>
                                             <th>Fiyat</th>
                                             <th>Ödeme</th>
+                                            <?php if ($currentUser['is_admin']): ?>
                                             <th>Ekleyen</th>
+                                            <?php endif; ?>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -155,7 +157,9 @@ $stats = $pdo->query("
                                                 <td><span class="badge bg-primary"><?= $record['quantity'] ?> adet</span></td>
                                                 <td><strong><?= number_format($record['total_price'], 2) ?> ₺</strong></td>
                                                 <td><?= e($record['payment_method_name']) ?></td>
+                                                <?php if ($currentUser['is_admin']): ?>
                                                 <td class="text-muted small"><?= e($record['created_by_name']) ?></td>
+                                                <?php endif; ?>
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>

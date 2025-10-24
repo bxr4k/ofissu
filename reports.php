@@ -66,7 +66,7 @@ $generalStats = $pdo->query("
         SUM(quantity) as total_quantity,
         SUM(total_price) as total_spent,
         AVG(quantity) as avg_quantity_per_purchase,
-        AVG(total_price) as avg_price_per_purchase,
+        AVG(unit_price) as avg_unit_price,
         MIN(date) as first_purchase,
         MAX(date) as last_purchase,
         DATEDIFF(MAX(date), MIN(date)) as days_span
@@ -151,8 +151,8 @@ $maxMonthlyQuantity = !empty($monthlyTrends) ? max(array_column($monthlyTrends, 
             <div class="col-md-2 mb-3">
                 <div class="card stat-card bg-warning text-dark">
                     <div class="card-body text-center">
-                        <h3 class="stat-number"><?= number_format($generalStats['avg_price_per_purchase'] ?? 0, 0) ?> ₺</h3>
-                        <p class="stat-label mb-0">Ort. Fiyat/Alım</p>
+                        <h3 class="stat-number"><?= number_format($generalStats['avg_unit_price'] ?? 0, 2) ?> ₺</h3>
+                        <p class="stat-label mb-0">Ort. Damacana Fiyatı</p>
                     </div>
                 </div>
             </div>

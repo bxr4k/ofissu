@@ -260,20 +260,139 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
+    /* Stat kartları */
     .stat-number {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
     
+    .stat-label {
+        font-size: 0.75rem;
+    }
+    
+    /* Stat card'ları 2 sütun yap */
+    .col-md-2 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    
+    /* Quick action buttons */
     .quick-action-btn {
         font-size: 1rem;
+        padding: 0.8rem;
     }
     
+    /* Welcome section */
     .welcome-section h2 {
         font-size: 1.5rem;
     }
     
+    /* Navbar */
     .navbar-brand {
         font-size: 1.1rem;
+    }
+    
+    .navbar-nav .nav-link {
+        font-size: 0.9rem;
+    }
+    
+    /* Tablolar */
+    .table-responsive {
+        font-size: 0.85rem;
+    }
+    
+    .table th, .table td {
+        padding: 0.5rem;
+        white-space: nowrap;
+    }
+    
+    /* Badge'ler */
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    /* Form elements */
+    .form-label {
+        font-size: 0.9rem;
+    }
+    
+    /* Card headers */
+    .card-header h5 {
+        font-size: 1rem;
+    }
+    
+    /* Grafik container'ları */
+    canvas {
+        max-height: 250px !important;
+    }
+    
+    /* İstatistik kartları mobilde daha kompakt */
+    .text-center h6 {
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .text-center .h5 {
+        font-size: 1.1rem;
+    }
+    
+    /* Progress bar'lar */
+    .progress {
+        height: 15px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Extra small ekranlar için */
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .stat-label {
+        font-size: 0.7rem;
+    }
+    
+    /* Containerlar */
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    /* Card padding'leri azalt */
+    .card-body {
+        padding: 0.75rem;
+    }
+    
+    /* Butonlar */
+    .btn {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .btn-lg {
+        font-size: 0.95rem;
+        padding: 0.6rem 0.9rem;
+    }
+    
+    /* Tablolar */
+    .table {
+        font-size: 0.75rem;
+    }
+    
+    .table th, .table td {
+        padding: 0.25rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Muhtelif istatistikler bölümü */
+    .row.text-center .col-md-3,
+    .row.text-center .col-md-4 {
+        margin-bottom: 1rem;
+    }
+    
+    /* Canvas grafikler daha küçük */
+    canvas {
+        max-height: 200px !important;
     }
 }
 

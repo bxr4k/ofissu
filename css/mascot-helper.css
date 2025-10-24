@@ -271,35 +271,9 @@
     .speech-bubble {
         bottom: 160px;
         right: 110px;
-        max-width: 240px;
-        min-width: 200px;
-        padding: 1rem 1.2rem;
-    }
-    
-    .speech-bubble-content strong {
-        font-size: 1.1rem;
-    }
-    
-    .speech-bubble-content span {
-        font-size: 0.9rem;
-    }
-    
-    .speech-bubble::after {
-        right: 20px;
-        bottom: -12px;
-        border-left: 12px solid transparent;
-        border-right: 12px solid transparent;
-        border-top: 12px solid #764ba2;
-    }
-}
-
-/* Extra Small Mobile */
-@media (max-width: 480px) {
-    .speech-bubble {
         max-width: 200px;
-        min-width: 180px;
-        padding: 0.9rem 1rem;
-        right: 105px;
+        min-width: 170px;
+        padding: 0.8rem 1rem;
     }
     
     .speech-bubble-content strong {
@@ -308,6 +282,33 @@
     
     .speech-bubble-content span {
         font-size: 0.85rem;
+    }
+    
+    .speech-bubble::after {
+        right: 15px;
+        bottom: -10px;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid #764ba2;
+    }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 480px) {
+    .speech-bubble {
+        max-width: 160px;
+        min-width: 140px;
+        padding: 0.6rem 0.8rem;
+        right: 105px;
+    }
+    
+    .speech-bubble-content strong {
+        font-size: 0.9rem;
+    }
+    
+    .speech-bubble-content span {
+        font-size: 0.75rem;
+        line-height: 1.3;
     }
 }
 
