@@ -34,21 +34,6 @@
             <!-- FAQ Items -->
             <div class="faq-item">
                 <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>🔐 Sisteme nasıl giriş yapabilirim?</span>
-                    <span class="faq-icon">▼</span>
-                </div>
-                <div class="faq-answer">
-                    <p><strong>Cep telefonu numaranız ile giriş yapabilirsiniz:</strong></p>
-                    <ul>
-                        <li>Login sayfasında telefon numaranızı girin</li>
-                        <li>Format: 05XX XXX XX XX</li>
-                        <li>Kayıtlı değilseniz admin ile iletişime geçin</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
                     <span>💰 "Bugün Benim" butonu ne işe yarar?</span>
                     <span class="faq-icon">▼</span>
                 </div>
@@ -195,16 +180,23 @@ mascotContainer.addEventListener('touchend', function(e) {
 
 // Sayfa yüklendiğinde
 window.addEventListener('DOMContentLoaded', function() {
-    // İlk yüklemede konuşma balonunu göster
-    setTimeout(function() {
-        const bubble = document.getElementById('speechBubble');
-        bubble.classList.add('active');
-        
-        // 6 saniye sonra gizle
+    // İlk yüklemede konuşma balonunu göster (sadece oturumda bir kez)
+    const hasSeenWelcome = sessionStorage.getItem('ofissu_welcome_shown');
+    
+    if (!hasSeenWelcome) {
         setTimeout(function() {
-            bubble.classList.remove('active');
-        }, 6000);
-    }, 2000);
+            const bubble = document.getElementById('speechBubble');
+            bubble.classList.add('active');
+            
+            // Session'a kaydet - bu oturumda gösterildi
+            sessionStorage.setItem('ofissu_welcome_shown', 'true');
+            
+            // 6 saniye sonra gizle
+            setTimeout(function() {
+                bubble.classList.remove('active');
+            }, 6000);
+        }, 2000);
+    }
 });
 
 // Panel dışına tıklandığında kapat
