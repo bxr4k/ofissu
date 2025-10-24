@@ -7,11 +7,6 @@
     right: 20px;
     z-index: 1000;
     transition: all 0.3s ease;
-    cursor: grab;
-}
-
-.mascot-widget:active {
-    cursor: grabbing;
 }
 
 /* Maskot Container */
@@ -21,21 +16,18 @@
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+    cursor: pointer;
 }
 
 /* Maskot Görsel */
 .mascot-image {
     width: 150px;
     height: 200px;
-    cursor: grab;
+    cursor: pointer;
     transition: transform 0.3s ease;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
     object-fit: contain;
     pointer-events: auto;
-}
-
-.mascot-image:active {
-    cursor: grabbing;
 }
 
 .mascot-image:hover {

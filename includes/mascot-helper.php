@@ -177,143 +177,24 @@ function toggleFaq(element) {
     faqItem.classList.toggle('active');
 }
 
-// Maskotu sürüklenebilir yap
-let isDragging = false;
-let hasMoved = false;
-let currentX;
-let currentY;
-let initialX;
-let initialY;
-let xOffset = 0;
-let yOffset = 0;
-let startX = 0;
-let startY = 0;
-const DRAG_THRESHOLD = 15; // 15 pixel hareket eşiği - sürükleme için
-
-const mascotWidget = document.querySelector('.mascot-widget');
+// Maskot tıklama/dokunma
 const mascotContainer = document.getElementById('mascotContainer');
 const mascotImage = document.getElementById('mascotImage');
 
-// Mouse olayları
-mascotContainer.addEventListener('mousedown', dragStart);
-document.addEventListener('mousemove', drag);
-document.addEventListener('mouseup', dragEnd);
+// Basit click event
+mascotContainer.addEventListener('click', function(e) {
+    e.preventDefault();
+    toggleHelp();
+});
 
-// Touch olayları - passive false çünkü preventDefault kullanacağız
-mascotContainer.addEventListener('touchstart', dragStart, { passive: false });
-document.addEventListener('touchmove', drag, { passive: false });
-document.addEventListener('touchend', dragEnd);
+// Touch event - mobil için
+mascotContainer.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    toggleHelp();
+}, { passive: false });
 
-function dragStart(e) {
-    hasMoved = false;
-    
-    if (e.type === 'touchstart') {
-        initialX = e.touches[0].clientX - xOffset;
-        initialY = e.touches[0].clientY - yOffset;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-    } else {
-        initialX = e.clientX - xOffset;
-        initialY = e.clientY - yOffset;
-        startX = e.clientX;
-        startY = e.clientY;
-    }
-    
-    if (e.target === mascotContainer || e.target === mascotImage || e.target.classList.contains('help-badge')) {
-        isDragging = true;
-        mascotWidget.style.cursor = 'grabbing';
-        mascotImage.style.cursor = 'grabbing';
-    }
-}
-
-function drag(e) {
-    if (isDragging) {
-        let clientX, clientY;
-        
-        if (e.type === 'touchmove') {
-            clientX = e.touches[0].clientX;
-            clientY = e.touches[0].clientY;
-        } else {
-            clientX = e.clientX;
-            clientY = e.clientY;
-        }
-        
-        // Hareket mesafesini kontrol et
-        const deltaX = Math.abs(clientX - startX);
-        const deltaY = Math.abs(clientY - startY);
-        
-        // Eşiği aştıysa sürükleme başlat
-        if (deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD) {
-            if (!hasMoved) {
-                // İlk hareket - eğer panel açıksa kapat
-                const panel = document.getElementById('helpPanel');
-                if (panel.classList.contains('active')) {
-                    panel.classList.remove('active');
-                }
-            }
-            hasMoved = true;
-            e.preventDefault();
-            
-            if (e.type === 'touchmove') {
-                currentX = e.touches[0].clientX - initialX;
-                currentY = e.touches[0].clientY - initialY;
-            } else {
-                currentX = e.clientX - initialX;
-                currentY = e.clientY - initialY;
-            }
-            
-            xOffset = currentX;
-            yOffset = currentY;
-            
-            // Ekran sınırları içinde tut
-            const rect = mascotWidget.getBoundingClientRect();
-            const maxX = window.innerWidth - rect.width - 20;
-            const maxY = window.innerHeight - rect.height - 20;
-            
-            // Sınırlama hesapları
-            xOffset = Math.min(Math.max(-(window.innerWidth - rect.width - 40), xOffset), maxX - 20);
-            yOffset = Math.min(Math.max(-(window.innerHeight - rect.height - 40), yOffset), maxY - 20);
-            
-            setTranslate(xOffset, yOffset, mascotWidget);
-        }
-    }
-}
-
-function dragEnd(e) {
-    if (isDragging) {
-        isDragging = false;
-        mascotWidget.style.cursor = 'grab';
-        mascotImage.style.cursor = 'grab';
-        
-        // Pozisyonu local storage'a kaydet
-        if (hasMoved) {
-            localStorage.setItem('mascotX', xOffset);
-            localStorage.setItem('mascotY', yOffset);
-        } else {
-            // Hareket etmediyse, hemen toggle help çağır
-            toggleHelp();
-        }
-    }
-}
-
-function setTranslate(xPos, yPos, el) {
-    el.style.transform = `translate(${xPos}px, ${yPos}px)`;
-}
-
-// Sayfa yüklendiğinde kaydedilmiş pozisyonu al
+// Sayfa yüklendiğinde
 window.addEventListener('DOMContentLoaded', function() {
-    const savedX = localStorage.getItem('mascotX');
-    const savedY = localStorage.getItem('mascotY');
-    
-    if (savedX !== null && savedY !== null) {
-        xOffset = parseInt(savedX);
-        yOffset = parseInt(savedY);
-        setTranslate(xOffset, yOffset, mascotWidget);
-    }
-    
-    mascotWidget.style.cursor = 'grab';
-    mascotImage.style.cursor = 'grab';
-    
     // İlk yüklemede konuşma balonunu göster
     setTimeout(function() {
         const bubble = document.getElementById('speechBubble');
