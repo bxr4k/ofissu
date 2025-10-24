@@ -165,16 +165,31 @@ function toggleFaq(element) {
 // Maskot tıklama/dokunma
 const mascotContainer = document.getElementById('mascotContainer');
 const mascotImage = document.getElementById('mascotImage');
+const mascotWidget = document.querySelector('.mascot-widget');
 
 // Basit click event
 mascotContainer.addEventListener('click', function(e) {
     e.preventDefault();
+    
+    // Küçülmüşse, büyüt ve paneli aç
+    if (mascotWidget.classList.contains('minimized')) {
+        mascotWidget.classList.remove('minimized');
+        sessionStorage.setItem('ofissu_mascot_expanded', 'true');
+    }
+    
     toggleHelp();
 });
 
 // Touch event - mobil için
 mascotContainer.addEventListener('touchend', function(e) {
     e.preventDefault();
+    
+    // Küçülmüşse, büyüt ve paneli aç
+    if (mascotWidget.classList.contains('minimized')) {
+        mascotWidget.classList.remove('minimized');
+        sessionStorage.setItem('ofissu_mascot_expanded', 'true');
+    }
+    
     toggleHelp();
 }, { passive: false });
 
@@ -196,6 +211,21 @@ window.addEventListener('DOMContentLoaded', function() {
                 bubble.classList.remove('active');
             }, 6000);
         }, 2000);
+    }
+    
+    // Mobilde otomatik küçülme (sadece kullanıcı manuel büyütmediyse)
+    const isMobile = window.innerWidth <= 768;
+    const wasExpanded = sessionStorage.getItem('ofissu_mascot_expanded');
+    
+    if (isMobile && !wasExpanded) {
+        // 15 saniye sonra maskotu küçült
+        setTimeout(function() {
+            const panel = document.getElementById('helpPanel');
+            // Panel açık değilse küçült
+            if (!panel.classList.contains('active')) {
+                mascotWidget.classList.add('minimized');
+            }
+        }, 15000);
     }
 });
 

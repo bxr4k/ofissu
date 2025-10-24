@@ -24,7 +24,7 @@
     width: 150px;
     height: 200px;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: all 0.5s ease;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
     object-fit: contain;
     pointer-events: auto;
@@ -32,6 +32,23 @@
 
 .mascot-image:hover {
     transform: scale(1.05) translateY(-5px);
+}
+
+/* Maskot küçülme durumu (mobil için) */
+.mascot-widget.minimized .mascot-image {
+    width: 80px;
+    height: 107px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+
+.mascot-widget.minimized .speech-bubble {
+    display: none !important;
+}
+
+.mascot-widget.minimized .help-badge {
+    width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
 }
 
 /* Yardım Paneli */
