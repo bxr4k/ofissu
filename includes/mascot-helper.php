@@ -186,11 +186,9 @@ let initialX;
 let initialY;
 let xOffset = 0;
 let yOffset = 0;
-let dragStartTime = 0;
 let startX = 0;
 let startY = 0;
-const DRAG_THRESHOLD = 10; // 10 pixel hareket eşiği
-const CLICK_TIME_THRESHOLD = 300; // 300ms - mobil için daha uzun
+const DRAG_THRESHOLD = 15; // 15 pixel hareket eşiği - sürükleme için
 
 const mascotWidget = document.querySelector('.mascot-widget');
 const mascotContainer = document.getElementById('mascotContainer');
@@ -201,18 +199,12 @@ mascotContainer.addEventListener('mousedown', dragStart);
 document.addEventListener('mousemove', drag);
 document.addEventListener('mouseup', dragEnd);
 
-// Touch olayları
+// Touch olayları - passive false çünkü preventDefault kullanacağız
 mascotContainer.addEventListener('touchstart', dragStart, { passive: false });
 document.addEventListener('touchmove', drag, { passive: false });
 document.addEventListener('touchend', dragEnd);
 
 function dragStart(e) {
-    // Panel açıksa sürükleme yapma
-    if (document.getElementById('helpPanel').classList.contains('active')) {
-        return;
-    }
-    
-    dragStartTime = Date.now();
     hasMoved = false;
     
     if (e.type === 'touchstart') {
@@ -250,7 +242,15 @@ function drag(e) {
         const deltaX = Math.abs(clientX - startX);
         const deltaY = Math.abs(clientY - startY);
         
+        // Eşiği aştıysa sürükleme başlat
         if (deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD) {
+            if (!hasMoved) {
+                // İlk hareket - eğer panel açıksa kapat
+                const panel = document.getElementById('helpPanel');
+                if (panel.classList.contains('active')) {
+                    panel.classList.remove('active');
+                }
+            }
             hasMoved = true;
             e.preventDefault();
             
@@ -289,12 +289,9 @@ function dragEnd(e) {
         if (hasMoved) {
             localStorage.setItem('mascotX', xOffset);
             localStorage.setItem('mascotY', yOffset);
-        }
-        
-        // Eğer hareket etmedi veya çok hızlı tıklandıysa, toggle help çağır
-        const dragDuration = Date.now() - dragStartTime;
-        if (!hasMoved && dragDuration < CLICK_TIME_THRESHOLD) {
-            setTimeout(() => toggleHelp(), 50);
+        } else {
+            // Hareket etmediyse, hemen toggle help çağır
+            toggleHelp();
         }
     }
 }
