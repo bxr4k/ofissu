@@ -8,11 +8,24 @@ $errors = [];
 $success = false;
 
 // Kurulum zaten yapılmış mı kontrol et
-if (file_exists('config.php')) {
-    require_once 'config.php';
-    if (defined('DB_HOST')) {
+$envConfigExists = getenv('DB_HOST') && getenv('DB_NAME') && getenv('DB_USER');
+
+if (file_exists('config.php') || $envConfigExists) {
+    if ($envConfigExists) {
+        // Environment variables var, onları kullan
+        define('DB_HOST', getenv('DB_HOST'));
+        define('DB_NAME', getenv('DB_NAME'));
+        define('DB_USER', getenv('DB_USER'));
+        define('DB_PASS', getenv('DB_PASS') ?: '');
+        define('DB_CHARSET', getenv('DB_CHARSET') ?: 'utf8mb4');
         $success = true;
-        $message = "Sistem zaten kurulmuş! <a href='login.php'>Giriş yapmak için tıklayın</a><br><small>Eğer yeniden kurulum yapmak istiyorsanız, config.php dosyasını silin.</small>";
+        $message = "Sistem environment variables kullanılarak yapılandırılmış! <a href='login.php'>Giriş yapmak için tıklayın</a><br><small class='text-muted'>Coolify deployment tespit edildi.</small>";
+    } else {
+        require_once 'config.php';
+        if (defined('DB_HOST')) {
+            $success = true;
+            $message = "Sistem zaten kurulmuş! <a href='login.php'>Giriş yapmak için tıklayın</a><br><small>Eğer yeniden kurulum yapmak istiyorsanız, config.php dosyasını silin.</small>";
+        }
     }
 }
 
@@ -130,24 +143,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$success) {
                 $stmt->execute([$method]);
             }
             
-            // config.php dosyasını oluştur
-            $config_content = "<?php\n";
-            $config_content .= "/**\n";
-            $config_content .= " * Veritabanı Yapılandırması\n";
-            $config_content .= " * Otomatik oluşturuldu: " . date('Y-m-d H:i:s') . "\n";
-            $config_content .= " */\n\n";
-            $config_content .= "define('DB_HOST', '$host');\n";
-            $config_content .= "define('DB_NAME', '$dbname');\n";
-            $config_content .= "define('DB_USER', '$username');\n";
-            $config_content .= "define('DB_PASS', '" . addslashes($password) . "');\n";
-            $config_content .= "define('DB_CHARSET', 'utf8mb4');\n";
-            
-            file_put_contents('config.php', $config_content);
+            // config.php dosyasını oluştur (sadece gerekirse)
+            $configWriteSuccess = true;
+            if (!file_exists('config.php') && !$envConfigExists) {
+                $config_content = "<?php\n";
+                $config_content .= "/**\n";
+                $config_content .= " * Veritabanı Yapılandırması\n";
+                $config_content .= " * .env dosyasından veya environment variables'dan okur\n";
+                $config_content .= " * Otomatik oluşturuldu: " . date('Y-m-d H:i:s') . "\n";
+                $config_content .= " */\n\n";
+                $config_content .= "// Environment variables'dan oku (Coolify için)\n";
+                $config_content .= "define('DB_HOST', getenv('DB_HOST') ?: '$host');\n";
+                $config_content .= "define('DB_NAME', getenv('DB_NAME') ?: '$dbname');\n";
+                $config_content .= "define('DB_USER', getenv('DB_USER') ?: '$username');\n";
+                $config_content .= "define('DB_PASS', getenv('DB_PASS') ?: '" . addslashes($password) . "');\n";
+                $config_content .= "define('DB_CHARSET', getenv('DB_CHARSET') ?: 'utf8mb4');\n";
+                
+                $configWriteSuccess = @file_put_contents('config.php', $config_content);
+            }
             
             $success = true;
             $message = "<strong>🎉 Kurulum başarıyla tamamlandı!</strong><br><br>";
             $message .= "✅ Veritabanı oluşturuldu<br>";
             $message .= "✅ Tüm tablolar oluşturuldu<br>";
+            $message .= "✅ Default veriler eklendi<br>";
+            if ($configWriteSuccess === false) {
+                $message .= "⚠️ config.php yazılamadı ama environment variables kullanılabilir<br>";
+            } else if (file_exists('config.php')) {
+                $message .= "✅ config.php oluşturuldu<br>";
+            } else {
+                $message .= "ℹ️ Environment variables kullanılıyor (Coolify)<br>";
+            }
             $message .= "✅ Fiyat sistemi aktif<br>";
             $message .= "✅ Telefon numarası sistemi aktif<br><br>";
             $message .= "<div class='alert alert-success'>";

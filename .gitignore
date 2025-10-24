@@ -1,5 +1,6 @@
 # Veritabanı yapılandırma dosyası
 config.php
+.env
 
 # Veritabanı güncelleme dosyaları (kullanıldıktan sonra silinmeli)
 update_database.php
