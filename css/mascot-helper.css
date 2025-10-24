@@ -1,0 +1,358 @@
+/* Maskot Yardım Widget Stilleri */
+
+/* Maskot Container - Sağ alt köşe */
+.mascot-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    cursor: grab;
+}
+
+.mascot-widget:active {
+    cursor: grabbing;
+}
+
+/* Maskot Container */
+.mascot-container {
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Maskot Görsel */
+.mascot-image {
+    width: 150px;
+    height: 200px;
+    cursor: grab;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    object-fit: contain;
+    pointer-events: auto;
+}
+
+.mascot-image:active {
+    cursor: grabbing;
+}
+
+.mascot-image:hover {
+    transform: scale(1.05) translateY(-5px);
+}
+
+/* Yardım Paneli */
+.help-panel {
+    position: absolute;
+    bottom: 220px;
+    right: 0;
+    width: 350px;
+    max-height: 500px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    display: none;
+    animation: slideUp 0.3s ease;
+    pointer-events: auto;
+}
+
+.help-panel.active {
+    display: block;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Panel Header */
+.help-panel-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.help-panel-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.close-help {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 1;
+    transition: transform 0.2s;
+}
+
+.close-help:hover {
+    transform: rotate(90deg);
+}
+
+/* Panel Body */
+.help-panel-body {
+    padding: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* FAQ Item */
+.faq-item {
+    margin-bottom: 0.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.faq-question {
+    background: #f8f9fa;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+    font-weight: 500;
+}
+
+.faq-question:hover {
+    background: #e9ecef;
+}
+
+.faq-icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.faq-item.active .faq-answer {
+    padding: 1rem;
+    max-height: 500px;
+}
+
+.faq-answer ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.faq-answer li {
+    margin: 0.25rem 0;
+}
+
+/* Konuşma Balonu */
+.speech-bubble {
+    position: absolute;
+    bottom: 220px;
+    right: 160px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.2rem 1.5rem;
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    max-width: 280px;
+    min-width: 220px;
+    display: none;
+    animation: fadeInBounce 0.5s ease;
+    pointer-events: none;
+    z-index: 999;
+}
+
+.speech-bubble.active {
+    display: block;
+}
+
+.speech-bubble-content {
+    text-align: center;
+    line-height: 1.6;
+}
+
+.speech-bubble-content strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.speech-bubble-content span {
+    font-size: 1rem;
+    opacity: 0.95;
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    right: 30px;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 15px solid #764ba2;
+}
+
+@keyframes fadeInBounce {
+    0% {
+        opacity: 0;
+        transform: scale(0.7) translateY(10px);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Pulse Animasyonu */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.mascot-image.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .mascot-widget {
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .mascot-image {
+        width: 100px;
+        height: 140px;
+    }
+    
+    .help-panel {
+        width: calc(100vw - 30px);
+        max-width: 350px;
+        bottom: 160px;
+        right: -15px;
+        max-height: 400px;
+    }
+    
+    .help-panel-body {
+        max-height: 280px;
+    }
+    
+    .speech-bubble {
+        bottom: 160px;
+        right: 110px;
+        max-width: 240px;
+        min-width: 200px;
+        padding: 1rem 1.2rem;
+    }
+    
+    .speech-bubble-content strong {
+        font-size: 1.1rem;
+    }
+    
+    .speech-bubble-content span {
+        font-size: 0.9rem;
+    }
+    
+    .speech-bubble::after {
+        right: 20px;
+        bottom: -12px;
+        border-left: 12px solid transparent;
+        border-right: 12px solid transparent;
+        border-top: 12px solid #764ba2;
+    }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 480px) {
+    .speech-bubble {
+        max-width: 200px;
+        min-width: 180px;
+        padding: 0.9rem 1rem;
+        right: 105px;
+    }
+    
+    .speech-bubble-content strong {
+        font-size: 1rem;
+    }
+    
+    .speech-bubble-content span {
+        font-size: 0.85rem;
+    }
+}
+
+/* Scrollbar Stilleri */
+.help-panel-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.help-panel-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.help-panel-body::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.help-panel-body::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Badge */
+.help-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ef4444;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+

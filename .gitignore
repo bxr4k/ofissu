@@ -1,0 +1,34 @@
+# Veritabanı yapılandırma dosyası
+config.php
+
+# Veritabanı güncelleme dosyaları (kullanıldıktan sonra silinmeli)
+update_database.php
+update_tc_to_phone.php
+
+# IDE ve editör dosyaları
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# İşletim sistemi dosyaları
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Geçici dosyalar
+*.log
+*.tmp
+*.cache
+
+# Vendor klasörü (eğer composer kullanılırsa)
+vendor/
+
+# Node modules (eğer frontend araçları kullanılırsa)
+node_modules/
+
+# Backup dosyaları
+*.bak
+*.backup
+*.old
+
